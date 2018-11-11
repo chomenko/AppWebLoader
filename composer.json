@@ -1,0 +1,30 @@
+{
+  "name": "chomenko/app-webloader",
+  "type": "extensions",
+  "description": "",
+  "keywords": ["WebLoader", "Extends scripts"],
+  "homepage": "https://github.com/chomenko/AppWebLoader",
+  "license": [],
+  "authors": [
+    {
+      "name": "Mykola Chomenko",
+      "homepage": "http://dipcom.cz",
+      "email": "mykola.chomenko@dipcom.cz"
+    }
+  ],
+  "support": {
+    "email": "mykola.chomenko@dipcom.cz"
+  },
+  "require": {
+    "php": ">=7.1",
+    "nette/di": ">=2.4",
+    "nette/application": ">=2.4",
+    "janmarek/webloader": ">=2.5",
+    "mobiledetect/mobiledetectlib": ">=2.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Chomenko\\ActionModal\\": "src/"
+    }
+  }
+}
