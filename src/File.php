@@ -48,6 +48,11 @@ class File
      */
     protected $device = self::ONLY_ALL;
 
+	/**
+	 * @var boolean
+	 */
+    protected $footer = FALSE;
+
     /**
      * @var string|null
      */
@@ -58,15 +63,16 @@ class File
      * @param Collection $parent
      * @param string $file
      * @param string $type
+	 * @param bool $footer
      * @throws AppWebLoaderException
      * @throws \ReflectionException
      */
-    public function __construct(Collection $parent, string $file, string $type)
+    public function __construct(Collection $parent, string $file, string $type, $footer = FALSE)
     {
         if(!$this->verifyConst("TYPE_", $type)){
             throw AppWebLoaderException::notAllowConstType("TYPE_", self::class);
         }
-
+		$this->footer = $footer;
         $this->file = $file;
         $this->type = $type;
         $this->parent = $parent;
@@ -177,5 +183,22 @@ class File
         }
         return false;
     }
+
+	/**
+	 * @param bool $footer
+	 */
+    public function setFooter($footer = TRUE)
+	{
+		$this->footer = $footer;
+	}
+
+	/**
+	 * @return bool
+	 */
+    public function isFooter(): bool
+	{
+		return $this->footer;
+	}
+
 
 }

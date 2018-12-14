@@ -21,15 +21,6 @@ trait WebLoader
     public $appWebLoader;
 
     /**
-     * @return null
-     */
-    public function getModuleName()
-    {
-        $module = Helpers::splitName($this->getName())[0];
-        return empty($module) ? null : $module;
-    }
-
-    /**
      * @return CssLoader
      */
     protected function createComponentCss():CssLoader
@@ -39,6 +30,18 @@ trait WebLoader
         $CssLoader =  $this->appWebLoader->createCssLoader($module, $this);
         return $CssLoader;
     }
+
+	/**
+	 * @return CssLoader
+	 */
+	protected function createComponentFooterCss():CssLoader
+	{
+		$module = Helpers::splitName($this->getName())[0];
+		empty($module) ? 'default' : $module;
+		$CssLoader =  $this->appWebLoader->createFooterCssLoader($module, $this);
+		return $CssLoader;
+	}
+
 
     /**
      * @return JavaScriptLoader

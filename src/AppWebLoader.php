@@ -75,6 +75,11 @@ class AppWebLoader
                 if(!$file->appliesToDevice($this->getDeviceConst())){
                     continue;
                 }
+
+				if($file->isFooter()){
+					continue;
+				}
+
                 $collection->addFile($file->getFile());
             }
         }
@@ -91,6 +96,43 @@ class AppWebLoader
 
         return $loader;
     }
+
+	/**
+	 * @param string $name
+	 * @param Presenter|null $presenter
+	 * @return CssLoader
+	 */
+	public function createFooterCssLoader(string $name, Presenter $presenter = null):CssLoader
+	{
+		$this->rendered = true;
+		$loader = $this->loader_factory->createCssLoader($name."Footer");
+		/** @var \WebLoader\FileCollection $collection */
+		$collection = $loader->getCompiler()->getFileCollection();
+
+		foreach ($this->getCollections() as $coll){
+			foreach ($coll->getStyles() as $file){
+
+				if(!$file->isFooter()){
+					continue;
+				}
+				$collection->addFile($file->getFile());
+			}
+		}
+
+		if($path = $this->getActionPath($presenter)){
+			foreach ($this->style_ext as $ext) {
+				$file = $path . '/' . $presenter->getAction() . '.'. $ext;
+				if (file_exists($file)) {
+					$collection->addFile($file);
+					break;
+				}
+			}
+		}
+
+		return $loader;
+	}
+
+
 
     /**
      * @param string $name
@@ -147,11 +189,6 @@ class AppWebLoader
         if(array_key_exists($name, $this->collections)){
             throw AppWebLoaderException::collectionExists($name);
         }
-
-        if($this->isRendered()){
-            throw AppWebLoaderException::alreadyRenderedCollection($name);
-        }
-
         return $this->collections[$name] = new Collection($this, $name);
     }
 
@@ -170,7 +207,6 @@ class AppWebLoader
     {
         return $this->rendered;
     }
-
 
     /**
      * @return string

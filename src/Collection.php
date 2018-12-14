@@ -61,22 +61,24 @@ class Collection
         return $this->name;
     }
 
-    /**
-     * @param string $file_name
-     * @return File
-     * @throws Exceptions\AppWebLoaderException
-     * @throws \ReflectionException
-     */
+	/**
+	 * @param string $file_name
+	 * @return File
+	 * @throws AppWebLoaderException
+	 * @throws \ReflectionException
+	 */
     public function addScript(string $file_name):File
     {
         if(!file_exists($file_name)){
             throw AppWebLoaderException::fileNotFound($file_name);
         }
 
+		$footer = false;
         if($this->parent->isRendered()){
-            throw AppWebLoaderException::alreadyRenderedFile($file_name);
-        }
-        return $this->scripts[] = new File($this, $file_name, File::TYPE_STYLE);
+			$footer = true;
+		}
+
+        return $this->scripts[] = new File($this, $file_name, File::TYPE_STYLE, $footer);
     }
 
     /**
@@ -92,10 +94,11 @@ class Collection
             throw AppWebLoaderException::fileNotFound($file_name);
         }
 
-        if($this->parent->isRendered()){
-            throw AppWebLoaderException::alreadyRenderedFile($file_name);
-        }
-        return $this->styles[] = new File($this, $file_name, File::TYPE_STYLE);
+		$footer = false;
+		if($this->parent->isRendered()){
+			$footer = true;
+		}
+        return $this->styles[] = new File($this, $file_name, File::TYPE_STYLE, $footer);
     }
 
     /**
